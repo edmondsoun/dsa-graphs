@@ -55,61 +55,110 @@ class Graph {
   }
 
   /** traverse graph with DFS and returns array of Node values */
-  depthFirstSearch(start, seen = new Set([start]), nodeValues = [start.value]) {
-    for (let neighbor of start.adjacent) {
-      if (!seen.has(neighbor)) {
-        seen.add(neighbor);
-        nodeValues.push(neighbor.value);
-        return this.depthFirstSearch(neighbor, seen, nodeValues);
-      }
-    }
-    return nodeValues;
-  }
-  // depthFirstSearch(start) {
-  //   let toVisitStack = [start];
-  //   let seen = new Set(toVisitStack);
-  //   let result = [start.value];
-
-  //   while (toVisitStack.length > 0) {
-  //     let currPerson = toVisitStack.pop();
-
-  //     for (let neighbor of currPerson.adjacent) {
-  //       if(!seen.has(neighbor)) {
-  //         toVisitStack.push(neighbor);
-  //         seen.add(neighbor);
-  //         result.push(neighbor.value)
-  //       }
+  // depthFirstSearch(start, seen = new Set([start]), nodeValues = [start.value]) {
+  //   for (let neighbor of start.adjacent) {
+  //     if (!seen.has(neighbor)) {
+  //       seen.add(neighbor);
+  //       nodeValues.push(neighbor.value);
+  //       return this.depthFirstSearch(neighbor, seen, nodeValues);
   //     }
   //   }
-  //   console.log("RESULT",result)
-  //   console.log("SEEn",seen)
-  //   return result;
+  //   return nodeValues;
   // }
+
+  //with a while loop
+  //with a stack
+  depthFirstSearch(start) {
+    let toVisitStack = [start];
+    let result = [];
+    let seen = new Set(toVisitStack);
+
+    seen.add(start)
+
+    while (toVisitStack.length > 0) {
+      let currPerson = toVisitStack.pop();
+      result.push(currPerson.value)
+
+      for (let neighbor of currPerson.adjacent) {
+        if(!seen.has(neighbor)) {
+          toVisitStack.push(neighbor);
+          seen.add(neighbor);
+        }
+      }
+    }
+
+    return result;
+
+  }
 
   /** traverse graph with BDS and returns array of Node values */
   breadthFirstSearch(start) {
-    // let toVisitStack = [start];
-    // let seen = new Set(toVisitStack);
-    // let result = [start.value];
+    let toVisitStack = [start];
+    let seen = new Set(toVisitStack);
+    let result = [start.value];
 
-    // while (toVisitStack.length > 0) {
-    //   let currPerson = toVisitStack.pop();
+    while (toVisitStack.length > 0) {
+      let currPerson = toVisitStack.pop();
 
-    //   for (let neighbor of currPerson.adjacent) {
-    //     if(!seen.has(neighbor)) {
-    //       toVisitStack.push(neighbor);
-    //       seen.add(neighbor);
-    //       result.push(neighbor.value)
-    //     }
-    //   }
-    // }
-    // console.log("RESULT",result)
-    // console.log("SEEn",seen)
-    // return result;
+
+      for (let neighbor of currPerson.adjacent) {
+        if(!seen.has(neighbor)) {
+          toVisitStack.push(neighbor);
+          seen.add(neighbor);
+          result.push(neighbor.value)
+        }
+      }
+    }
+
+    return result;
   }
 
   /** find the distance of the shortest path from the start vertex to the end vertex */
-  distanceOfShortestPath(start, end) { }
+  // graph is unweighted and undirected
+
+  // 
+  distanceOfShortestPath(start, end) {
+    let toVisitStack = [start];
+    let seen = new Set(toVisitStack);
+    let counter = 0;
+
+    if (start.value === undefined || end.value === undefined) return undefined;
+
+    while (!toVisitStack.includes(end)) {
+      let currPerson = toVisitStack.pop();
+      console.log("currPerson:",currPerson)
+
+      for (let neighbor of currPerson.adjacent) {
+        if(!seen.has(neighbor)) {
+          toVisitStack.push(neighbor);
+          seen.add(neighbor);
+        }
+      }
+      counter++;
+    }
+
+    return counter;
+  }
 }
 
 module.exports = { Graph, Node };
+
+
+// let graph = new Graph()
+
+// let r = new Node("R");
+// let i = new Node("I");
+// let t = new Node("T");
+// let h = new Node("H");
+// let m = new Node("M");
+
+// graph.addVertices([r, i, t, h, m])
+
+// graph.addEdge(r, i)
+// graph.addEdge(r, t)
+// graph.addEdge(r, h)
+// graph.addEdge(i, t)
+// graph.addEdge(t, h)
+// graph.addEdge(h, m)
+
+// graph.distanceOfShortestPath(r, m) // 2
